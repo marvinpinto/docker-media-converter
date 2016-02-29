@@ -1,0 +1,30 @@
+language: python
+sudo: true
+
+services:
+  - 'docker'
+
+env:
+  global:
+    - secure: "CQNAwQs20vdI9BM8knqcK5RlOQfKRZUPMr9uUa1CYr1VNJOqJaQ1MIrFqTS3Odh3dlHHqezrwU+sCJF6cxN9hjgKRqf5mjKkz47dHYevJy+jUVhyJ9fdgSnUgllj2a3DpbFLEA4fMtFzCXHiOc40G3fJBiDD18JHNcEPcYVIs/iXN4J1kobVL/ZN1Wa/GX2uj19+98JBstPmitRpABqS7jRxycDorF47KC8GMwWhggbfKp4fkSY+dvpfItBGET9EmIQ62A2m7reNioKJdBDKgiObtyeGBgRpqaW7HBwtXe54Qv591YZLZd9A7LRklVAhBCUZS16MXiN+HXZB/ePXMSB+1yLzfnr8uBGgufojpJ+iuXICwGGIgc4W/g16UHXn2JDnm+dcGuaEjSSx+JmL3uKuSLVvIT9URd7smCaFyaPtiPjxUf6Y3QmstQhxAjioHjhoWwv3MAT9/v4m6uqlr5ezh38L7Z+ljO2PUKx9IfhmHBTUanr/gPgMOxxPWJX/A/+ll1dLvcDZ2EzW/0ARNBTkg7eRsU4Zn6M55Ofrb20ddEi6GZjsJONUxJjVL6sqH64SwcxDhLagYw9hrwnjAf3RfkTB8qq6b9VGpX0mbk8CuCwWgf02EuZ2iUqDgfZtJUZHUYX6eJ+cSVflE6z+P21oeF3qu49wqCHxJQoU36E="
+    - secure: "Se1WvOcvgrniWMvzQyq1wAyEDE2Kxd7+2/HhXolcXsRSqfTZW9eNLo4VizTqhKmLS7KgaVvGPWchptGQVqKSLqjldc6BmAw2jkq5e9drs3ewjvwBWsSODduzEG+pcn1tv/ALVi4HMYFpQkw5KiB3L3jV2vFhzVkbkB1zHwCcsWX87xdLWSExm/mjDlzE7U1QKTZPx48riCHxxPY9/izi9hveNXSCih5EH7W2TNUvI9paJXJWQDZb2Ry0/axkcrvfBxT+KE4/oEddl9JRSsi3m7+yYsEs8eACscQjps+h+2hO8mCeoK3sj5XCcv3AZBBOCvvRT4Ljo7nxnVmV/C8+NRbytaPM3/xIFeQSyQff/byh+WZYPdvMY29tRGwDeWoLIDhhsOJvK0Ql3BCyFSJRY/1XYbv6idlU6L+TR21ni3j7UYxCvDJytRI0gmH+YTE5ptw8ogyL9BKGPZ9j+MANXjL4M3gKhcXGmqdCkMnmOy658M2MvApzDP3CnlY3UJzDXicQDaGXqD4WUhrhyJ/VNrzfWbVEnqDXOKXPUN+S5kK9KF4uGLdQ3NY0sDyMtK+niPaoz5moXAQUPajuO9t4aSlLE1UptIrFl2TleM/c09N7tnDWQ0P7v3IgjlCf8vD2oYGLozk8qhZRz/By3LlSS53wxQ2B2PuDAIlRDlM6xDI="
+
+script:
+  - 'docker info'
+  - 'docker --version'
+  - 'docker build --no-cache --rm -t quay.io/marvin/media-converter:latest .'
+
+deploy:
+- provider: script
+  script: 'docker login -e="." -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" quay.io && docker push quay.io/marvin/media-converter:latest'
+  on:
+    repo: marvinpinto/docker-media-converter
+    branch: master
+
+notifications:
+  email: false
+  irc:
+    channels:
+      - secure: "TNQeHKNUSsGJKozBIgzggH2IA6qkBLk2zTWkCQXG0GZR7YUIekzn0EQCGq612/AzNWQCXQ/sJXJPF8zMbt3NsTP9GD595cGfMcmz9jwBv0ziqcOKa3nKY70mt1Bf4nZXVWR9C4v2Teriad759bFsK5I0vDVPUxaoz3MVdRsIhpufCpnyPN2nBaOL+Pl3VbqU+UJ9wrnbpkcr0/iiPIQ8cqxeswK+pAC6Dv8zRHPeEJMZdc3Rx4dYzP4rqRvbEuA1XG5de0spSy2MVWGdIZJ96VMVKM2rL+XGJJJOj8PjC2Ysg+r/VwPJPFR5fXmVHRtRQuwR6cHm/ufA6qQSnuAv+sh3X5dGo0w9wNa/pLgQVgfnJooblipPQ7ZYDgYqaQfhZ9ZJqOrbIZc86PeLEbN859BQQMTWqX7+/PG4/XDPEfL2yFRj+Kj2PzJ16bnyNptqtRtLddh4VeHgKCiosDfGaHPttoIrCF7b8438B3oPlrkrulHwwVIChVJUA1ynYVwcjfbYqYN2uuDFsXqjnQffgI1Cg3Py3MrGQ6Ef7iVW7Q8PN+/fZruThloUWnVm95l+OrBHaTMCWJoxxPq2KUvvfafCqb16Oi3eiMmAszUwFDqhpVCLF29aRtzBuqqEOI6MBFEYnnDgyBbVfwELr1EompMDiBKuqV7R9qWEnCT+Cuo="
+    on_success: "change"
+    on_failure: "change"
